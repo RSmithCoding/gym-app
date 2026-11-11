@@ -89,15 +89,15 @@ def exercise():
     print("")
     choice = input("Please select 'b' to go back, 'a' to add a new record, 'd' to delete or 'm' to modify and existing record.. ")
 
-    while choice != "b" or "a" or "d" or "m":
-            if choice == "b":
+    while choice.lower() != "b" or "a" or "d" or "m":
+            if choice.lower() == "b":
                 header()
                 mainmenu()
-            elif choice == "a":
+            elif choice.lower() == "a":
                 add_exercise()
-            elif choice == "d":
+            elif choice.lower() == "d":
                 delete_exercise()
-            elif choice == "m":
+            elif choice.lower() == "m":
                 modify_exercise()
 
             clear()
@@ -119,12 +119,12 @@ def add_exercise():
     print()
     print()
 
-    choice = input("Would you like to add the abouve to the database? Press 'y' to confirm or 'n' to return.. ")
+    choice = input("Would you like to add the above to the database? Press 'y' to confirm or 'n' to return.. ")
 
     new_exercise = new_name, new_body_area, new_secondary_area
 
-    while choice != "y" or "n":
-        if choice == "y":
+    while choice.lower() != "y" or "n":
+        if choice.lower() == "y":
             cur.execute("INSERT INTO Exercises VALUES (NULL,?,?,?)", new_exercise)
             con.commit()
             con.close()
@@ -202,7 +202,7 @@ def modify_exercise():
                 print()
                 choice = input("Are you happy with the changes? 'y' to confirm or 'n' to go back.. ")
 
-                while choice.lower != "y" or "n":
+                while choice.lower() != "y" or "n":
                     if choice.lower() == "y":
                         cur.execute("UPDATE Exercises SET exercise_name=?, body_area=?, secondary_area=? WHERE exercise_id=?", (new_namemod,new_primarymod,new_secondarymod,idtomod))
                         con.commit()
@@ -212,7 +212,7 @@ def modify_exercise():
                         check = 1
                         return
                 
-    
+        
         con.close() 
         header()
         exercise()
@@ -288,10 +288,10 @@ def newsession():
             elif choice == "s":
                 break                   
             else:
-                print("Please choose from the choices available")
+                print("Please select from the choices available")
 
         print("")
-        savesession = input("Would you like to save this session? type 'y' or 'n'.. ")
+        savesession = input("Would you like to save this session? type 'y' or 'n'.. ").lower()
 
         if savesession == "n":
             return
@@ -357,7 +357,7 @@ def viewsession():
         return viewsession()
 
     if showsession not in validids:
-        input("Please enter a vaild ID, press any key to continue..")
+        input("Please enter a valid ID, press any key to continue..")
         con.close()
         return viewsession()
 
@@ -385,7 +385,7 @@ def viewsession():
             print(row[1])
 
     print("")
-    choice = input("Please make a selection 'v' to view another, 'b' back to go main menu,\n'd' to delete this session or 't' to start traing.. ").strip().lower()
+    choice = input("Please make a selection 'v' to view another, 'b' back to go main menu,\n'd' to delete this session or 't' to start training.. ").strip().lower()
 
     while choice != "v" or "b" or "d" or "t":
         if choice == "v":
@@ -395,12 +395,13 @@ def viewsession():
             con.close()
             return header()
         elif choice == "d":
-            cur.execute("DELETE FROM Sessions WHERE session_id=?", (showsession,))
-            
-            input("Are you sure you want to delete this session? ")
-            con.commit()
-
-            return
+            checkdel = input("Are you sure you want to delete this session? 'y' or 'n'.. ").lower()
+            if checkdel == "y":
+                cur.execute("DELETE FROM Sessions WHERE session_id=?", (showsession,))
+                con.commit()
+                return
+            else:
+                return
         elif choice == "t":
             con.close()
             return training(showsession)
@@ -447,7 +448,7 @@ def pretraining():
         return pretraining()
     
     if showsession not in validids:
-        input("Please enter a vaild ID, press any key to continue..")
+        input("Please enter a valid ID, press any key to continue..")
         con.close()
         return pretraining()  
 
@@ -513,7 +514,7 @@ def training(sessionid):
                 sets_log.append((currentwoid, exercise_id, setnum, reps, weight))
 
             except ValueError:
-                input("Invaild entry this set will not count, press any key to continue.")
+                input("Invalid entry this set will not count, press any key to continue.")
 
     if sets_log:
 
@@ -546,7 +547,7 @@ def header():
     return
 
 def mainmenu():
-    print("[1] VEIW / ADD / DELETE EXERCISES                            [5]")
+    print("[1] VIEW / ADD / DELETE EXERCISES                            [5]")
     print("")
     print("[2] CREATE A NEW GYM SESSION                                 [6]")
     print("")
@@ -556,7 +557,7 @@ def mainmenu():
     print("""
         """ * 20)
 
-    choice = input("Please make a selection, or 'q' to Quit.. ")
+    choice = input("Please make a selection, or 'q' to Quit.. ").lower()
     
     while choice != 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or q:
         if choice == "1":
@@ -568,16 +569,16 @@ def mainmenu():
         elif choice == "4":
             pretraining()
         elif choice == "5":
-            break
+            header()
         elif choice == "6":
-            break
+            header()
         elif choice == "7":
-            break
+            header()
         elif choice == "8":
-            break
+            header()
         elif choice == "q":
             quit()
-        else: input("Please press 1 - 8 or 'q', press any key to aknowldge...")
+        else: input("Please press 1 - 8 or 'q', press any key to acknowledge...").lower()
         clear()
         header()
         mainmenu()
