@@ -1,0 +1,8 @@
+# macOS Finder files
+.DS_Store
+
+# Python cache
+__pycache__/
+
+# Database created when the app runs
+*.db
