@@ -119,11 +119,10 @@ def add_exercise():
     print()
     print()
 
-    choice = input("Would you like to add the above to the database? Press 'y' to confirm or 'n' to return.. ")
-
     new_exercise = new_name, new_body_area, new_secondary_area
 
-    while choice.lower() != "y" or "n":
+    while True:
+        choice = input("Would you like to add the above to the database? Press 'y' to confirm or 'n' to return.. ")
         if choice.lower() == "y":
             cur.execute("INSERT INTO Exercises VALUES (NULL,?,?,?)", new_exercise)
             con.commit()
@@ -202,9 +201,9 @@ def modify_exercise():
                 print()
                 new_secondarymod = input("Please enter the new or existing secondary area: ")
                 print()
-                choice = input("Are you happy with the changes? 'y' to confirm or 'n' to go back.. ")
 
-                while choice.lower() != "y" or "n":
+                while True:
+                    choice = input("Are you happy with the changes? 'y' to confirm or 'n' to go back.. ")
                     if choice.lower() == "y":
                         cur.execute("UPDATE Exercises SET exercise_name=?, body_area=?, secondary_area=? WHERE exercise_id=?", (new_namemod,new_primarymod,new_secondarymod,idtomod))
                         con.commit()
