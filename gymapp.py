@@ -128,7 +128,7 @@ def add_exercise():
             con.commit()
             con.close()
             exercise()
-        elif choice == "n":
+        elif choice.lower() == "n":
             return
         else:
             print("Please press 'y' or 'n'")
