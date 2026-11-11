@@ -131,6 +131,8 @@ def add_exercise():
             exercise()
         elif choice == "n":
             return
+        else:
+            print("Please press 'y' or 'n'")
 
 def delete_exercise():
     con = sqlite3.connect('gymapp.db')
@@ -211,6 +213,8 @@ def modify_exercise():
                     elif choice.lower() == "n":
                         check = 1
                         return
+                    else:
+                        print("Please press 'y' or 'n'")
                 
         
         con.close() 
