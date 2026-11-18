@@ -415,6 +415,11 @@ def viewsession():
             con.close()
             return viewsession()
 
+def exercisereport():
+    clear()
+    input("Exercise Report Screen")
+    return
+
 def pretraining():
         
     con = sqlite3.connect('gymapp.db')
@@ -550,7 +555,7 @@ def header():
     return
 
 def mainmenu():
-    print("[1] VIEW / ADD / DELETE EXERCISES                            [5]")
+    print("[1] VIEW / ADD / DELETE EXERCISES                            [5] EXERCISE REPORT")
     print("")
     print("[2] CREATE A NEW GYM SESSION                                 [6]")
     print("")
@@ -572,7 +577,7 @@ def mainmenu():
         elif choice == "4":
             pretraining()
         elif choice == "5":
-            header()
+            exercisereport()
         elif choice == "6":
             header()
         elif choice == "7":
