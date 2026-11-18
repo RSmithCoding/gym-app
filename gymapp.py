@@ -473,7 +473,7 @@ def exercisereport():
     exmatch = cur.fetchall()
 
     cur.execute("""SELECT
-                w.workout_date,   
+                STRFTIME('%d/%m/%Y', w.workout_date),   
                 MAX(t.weight) AS highest_weight,
                 SUM(t.reps * t.weight) AS total_weight,
                 w.wo_history_id
@@ -491,16 +491,16 @@ def exercisereport():
     lastdate = None
 
     for session in totalsquery:
+
         print("\nSession Date: {}\n".format(session[0]))
 
         for row in exmatch:
             if session[3] == row[4]:
                 print("Set {:<1}:  {:<2} reps x {:<5}kg".format(row[1], row[2], row[3]))
 
-        print(f"Total Volume Lifted {session[2]}kg\tHighest Lift {session[1]}kg")
+        print(f"\nTotal Volume Lifted {session[2]}kg\tHighest Lift {session[1]}kg")
 
-
-
+    print(session[0])
     input(f"Youve selected exercise ID {choice}")
     con.close()         
     header()
