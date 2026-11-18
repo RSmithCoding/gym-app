@@ -416,9 +416,82 @@ def viewsession():
             return viewsession()
 
 def exercisereport():
-    clear()
-    input("Exercise Report Screen")
-    return
+    header()
+    con = sqlite3.connect('gymapp.db')
+    cur = con.cursor()
+    cur.execute("PRAGMA foreign_keys = ON;")
+    cur.execute("SELECT exercise_id, exercise_name, body_area, secondary_area FROM Exercises ORDER BY body_area ASC")
+    con.commit()
+    allexercises = cur.fetchall()
+
+    if not allexercises:
+            input("No Exercises found!, press any key to return to main menu..")
+            con.close()
+            header()
+            return mainmenu()
+    
+    validids = [row[0] for row in allexercises]
+    rowcount = len(allexercises)
+    record = 0
+    ex_name = allexercises[record][1]
+    
+    print("")
+    print(f"\tID\t\tExercise Name\t\t     Target Body Area\t\tSecondary Area")
+    print("")
+    while record < rowcount:
+        print("{:<25}{:<29}{:<27}{:<10}".format(allexercises[record][0],allexercises[record][1],allexercises[record][2],allexercises[record][3]))
+        record = record + 1
+    print("")
+
+    while True:
+        choice = input("Please select an exercise ID to view a report on, or press 'b' to go back.. ")
+
+     
+        if choice.isdigit():
+
+            if int(choice) in validids:
+                break
+            else:
+                print("Please select a valid ID.. ")        
+            
+
+        elif choice.lower() == "b":
+            con.close()
+            header()
+            mainmenu()
+        else: 
+            print("Please chose a vaild option, an ID number or 'b'.. ")
+
+    cur.execute("""SELECT
+                    w.workout_date, t.sets, t.reps, t.weight 
+                    FROM WorkoutHistory w
+                    JOIN TrainingLog t ON t.wo_history_id = w.wo_history_id
+                    WHERE t.exercise_id = ? 
+                    ORDER BY w.workout_date, t.sets
+                    """, (int(choice),))
+    
+    exmatch = cur.fetchall()
+
+    header()
+    print(f"Exercise Report for {ex_name}:")
+    lastdate = None
+
+    for row in exmatch:
+        currentdate = row[0]
+
+        if currentdate == lastdate:
+            print("")
+        else:
+            print("\nSession Date: {}\n".format(row[0]))
+        for record in row:
+            print("Set {:<1}:  {:<2} x reps {:<5}Kg".format(row[1], row[2], row[3]))
+
+        lastdate = currentdate
+
+    input(f"Youve selected exercise ID {choice}")
+    con.close()         
+    header()
+    mainmenu()        
 
 def pretraining():
         
