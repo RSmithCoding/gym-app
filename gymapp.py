@@ -491,17 +491,19 @@ def exercisereport():
     lastdate = None
 
     for session in totalsquery:
-
+        bml = 0
         print("\nSession Date: {}\n".format(session[0]))
 
         for row in exmatch:
             if session[3] == row[4]:
+                maxlift = (int(row[3]) * (1 + (int(row[2]) / 30)))
+                if maxlift > bml:
+                    bml = maxlift
                 print("Set {:<1}:  {:<2} reps x {:<5}kg".format(row[1], row[2], row[3]))
 
-        print(f"\nTotal Volume Lifted {session[2]}kg\tHighest Lift {session[1]}kg")
-
-    print(session[0])
-    input(f"Youve selected exercise ID {choice}")
+        print(f"\nTotal Volume Lifted {session[2]}kg\tHighest Lift {session[1]}kg\tEstimated Max Single Rep {bml:.0f}kg")
+  
+    input(f"Press any key to return to main menu.. ")
     con.close()         
     header()
     mainmenu()        
