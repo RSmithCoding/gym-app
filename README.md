@@ -1,6 +1,6 @@
 # Gym App
 
-A command-line workout tracker. Build a library of exercises, group them into gym sessions, then log the reps and weight for each set as you train. Everything is stored in an SQLite database, ready for tracking progress over time.
+A command-line workout tracker. Build a library of exercises, group them into gym sessions, log the reps and weight for each set as you train, then see how each exercise is progressing. Everything is stored in an SQLite database.
 
 ## Why I built it
 
@@ -12,7 +12,27 @@ I wanted to build on what I learned in my first SQLite project ([Debt Relief](ht
 - **Session builder:** pick exercises for a session, filter the list by body area, toggle exercises in and out, and save it with a name
 - **View sessions:** see which exercises are in each saved session, delete a session, or start training from it
 - **Training log:** work through a session exercise by exercise, entering reps and weight for up to five sets each, with the date saved automatically
+- **Exercise report:** choose an exercise to see every workout you've done it in, with each set's reps and weight, plus the session's:
+  - total volume (reps × weight for every set, added up)
+  - highest weight lifted
+  - estimated one-rep max
 - Creates the database automatically the first time you run it, with a starter exercise
+
+## Example report
+
+```
+Exercise Report for Squat:
+
+Session Date: 12/11/2026
+
+Set 1:  8  reps x 60.0 kg
+Set 2:  8  reps x 62.5 kg
+Set 3:  6  reps x 65.0 kg
+
+Total Volume Lifted 1370.0kg	Highest Lift 65.0kg	Estimated Max Single Rep 79kg
+```
+
+The estimated one-rep max uses the Epley formula, weight × (1 + reps / 30). It's worked out for every set and the best is shown, because the heaviest set isn't always the best estimate. In the example above, 62.5 kg for 8 reps gives a higher estimate than 65 kg for 6.
 
 ## Database design
 
@@ -45,11 +65,10 @@ On first run it creates `gymapp.db` in the same folder. Choose options from the 
 
 ## Project status
 
-In progress. The exercise library, session builder and training log are working. Next I'm adding:
+In progress. The exercise library, session builder, training log and exercise report are working. Next I'm adding:
 
+- A chart showing progress for each exercise over time
 - Viewing a previous workout by date
-- A progress report for each exercise
-- A chart showing overall progress
 
 An iPhone version of the app is also in development, in a separate repository.
 
@@ -58,5 +77,8 @@ An iPhone version of the app is also in development, in a separate repository.
 - Designing a relational database with several linked tables
 - Using foreign keys with `ON DELETE CASCADE` and `ON DELETE SET NULL`
 - Joining tables with `JOIN` and `LEFT JOIN` to pull related data together
+- Summarising data in SQL with `GROUP BY`, `MAX` and `SUM`
+- Formatting dates in a query with `STRFTIME`
+- Matching rows from two queries with nested loops to build a report
 - Inserting many rows at once with `executemany`
 - Handling database errors with `try`/`except`/`finally` and rolling back changes
