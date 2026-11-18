@@ -463,7 +463,7 @@ def exercisereport():
             print("Please chose a vaild option, an ID number or 'b'.. ")
 
     cur.execute("""SELECT
-                    w.workout_date, t.sets, t.reps, t.weight 
+                    w.workout_date, t.sets, t.reps, t.weight
                     FROM WorkoutHistory w
                     JOIN TrainingLog t ON t.wo_history_id = w.wo_history_id
                     WHERE t.exercise_id = ? 
@@ -472,19 +472,34 @@ def exercisereport():
     
     exmatch = cur.fetchall()
 
+    cur.execute("""SELECT
+                w.workout_date,   
+                MAX(t.weight) AS highest_weight,
+                SUM(t.reps * t.weight) AS total_weight
+                FROM WorkoutHistory w
+                JOIN TrainingLog t ON t.wo_history_id = w.wo_history_id
+                WHERE t.exercise_id = ?
+                GROUP BY w.workout_date
+                ORDER BY w.workout_date
+                """, (int(choice),))
+
+    totalsquery = cur.fetchall()
+
     header()
     print(f"Exercise Report for {ex_name}:")
     lastdate = None
 
+    for row in totalsquery:
+        print(row)
+    input("press any key to continue")
+
     for row in exmatch:
         currentdate = row[0]
 
-        if currentdate == lastdate:
-            print("")
-        else:
+        if currentdate != lastdate:
             print("\nSession Date: {}\n".format(row[0]))
-        for record in row:
-            print("Set {:<1}:  {:<2} x reps {:<5}Kg".format(row[1], row[2], row[3]))
+        
+        print("Set {:<1}:  {:<2} x reps {:<5}Kg".format(row[1], row[2], row[3]))
 
         lastdate = currentdate
 
